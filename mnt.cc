@@ -276,7 +276,7 @@ static bool remountPt(const mount_t& mpt) {
 	}
 
 	LOG_D("Re-mounting '%s' (flags:%s)", mpt.dst.c_str(), flagsToStr(new_flags).c_str());
-	if (mount(mpt.dst.c_str(), mpt.dst.c_str(), NULL, new_flags, 0) == -1) {
+	if (RETRY_ON_EBUSY(mount(mpt.dst.c_str(), mpt.dst.c_str(), NULL, new_flags, 0)) == -1) {
 		PLOG_W("mount('%s', flags:%s)", mpt.dst.c_str(), flagsToStr(new_flags).c_str());
 		return false;
 	}
